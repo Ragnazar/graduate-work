@@ -1,6 +1,7 @@
 package ru.skypro.homework.model.entity;
 
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -23,7 +24,7 @@ public class Image {
     @Column(name = "data")
     @Type(type = "org.hibernate.type.BinaryType")
     private byte[] data;
-
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     private Ads ads;
 

@@ -5,7 +5,9 @@ import org.mapstruct.factory.Mappers;
 import ru.skypro.homework.model.dto.AdsDto;
 import ru.skypro.homework.model.dto.CreateAdsDto;
 import ru.skypro.homework.model.dto.FullAdsDto;
+import ru.skypro.homework.model.dto.UserDto;
 import ru.skypro.homework.model.entity.Ads;
+import ru.skypro.homework.model.entity.ProfileUser;
 
 import java.util.Collection;
 
@@ -27,6 +29,10 @@ public interface AdsMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
             nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     Ads createAdsToAds(CreateAdsDto createAdsDto);
+
+    @BeanMapping (nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+            nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
+      void partialUpdate(CreateAdsDto createAdsDto, @MappingTarget Ads ads);
 
     Collection<AdsDto> adsCollectionToAdsDto(Collection<Ads> adsCollection);
 

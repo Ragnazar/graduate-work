@@ -2,6 +2,7 @@ package ru.skypro.homework.model.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
@@ -20,7 +21,7 @@ public class Ads {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @NonNull
@@ -34,7 +35,7 @@ public class Ads {
 
     @Column(name = "description")
     private String description;
-
+    @ToString.Exclude
     @OneToMany(mappedBy = "ads", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<Image> images;
 

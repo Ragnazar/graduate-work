@@ -135,7 +135,8 @@ public class AdsServiceImpl implements ru.skypro.homework.service.AdsService {
         Ads ads = adsRepository.findById(id).orElseThrow(AdsNotFoundException::new);
         accessService.checkAdsAccess(id, authentication);
 
-        ads = AdsMapper.INSTANCE.createAdsToAds(updatedAds);
+     AdsMapper.INSTANCE.partialUpdate(updatedAds,ads);
+
 
         return AdsMapper
                 .INSTANCE
