@@ -14,7 +14,8 @@ public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
+    @Column(name = "generatedIdFromMultipartFile")
+    private String generatedIdFromMultipartFile;
     @Column(name = "file_size")
     private long fileSize;
     @Column(name = "media_type")
