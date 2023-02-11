@@ -23,7 +23,7 @@ public interface UserMapper {
     void partialUpdate(UserDto userDto, @MappingTarget ProfileUser profileUser);
 
 
-    @Mapping(source = "roleEnum", target = "role")
+
     @Mapping(source = "username", target = "email")
     ProfileUser registerReqDtoToUser(RegisterReqDto registerReqDto);
 

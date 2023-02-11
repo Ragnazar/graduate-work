@@ -5,9 +5,7 @@ import org.mapstruct.factory.Mappers;
 import ru.skypro.homework.model.dto.AdsDto;
 import ru.skypro.homework.model.dto.CreateAdsDto;
 import ru.skypro.homework.model.dto.FullAdsDto;
-import ru.skypro.homework.model.dto.UserDto;
 import ru.skypro.homework.model.entity.Ads;
-import ru.skypro.homework.model.entity.ProfileUser;
 
 import java.util.Collection;
 
@@ -15,12 +13,12 @@ import java.util.Collection;
 public interface AdsMapper {
     AdsMapper INSTANCE = Mappers.getMapper(AdsMapper.class);
 
-    @Mapping(source = "pk", target = "id")
+    @Mapping(target = "pk", source = "id")
     @Mapping(target = "author", source = "author.id")
     AdsDto adsToAdsDto(Ads Ads);
 
-    @Mapping(source = "id", target = "pk")
-    @Mapping(target = "author", source = "author.id")
+    @Mapping(target = "id", source = "pk")
+    @Mapping(target = "author.id", source = "author")
     Ads adsDtoToAds(AdsDto adsDto);
 
     @Mapping(target = "pk", source = "id")

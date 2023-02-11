@@ -27,6 +27,7 @@ import javax.validation.constraints.NotBlank;
 @RequestMapping("/ads")
 @RequiredArgsConstructor
 @Tag(name = "Объявления", description = "Методы работы с объявлениями.")
+
 public class AdsController {
 
     private final AdsService adsService;

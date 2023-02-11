@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.exception.AdsNotFoundException;
 import ru.skypro.homework.exception.CommentNotFoundException;
@@ -29,6 +30,7 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Slf4j
 @Service
+@Transactional
 public class AdsServiceImpl implements AdsService {
 
     private final CommentRepository commentRepository;

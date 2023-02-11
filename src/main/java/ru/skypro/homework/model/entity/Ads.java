@@ -3,7 +3,6 @@ package ru.skypro.homework.model.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
 import java.util.List;
@@ -24,7 +23,6 @@ public class Ads {
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    @NonNull
     private ProfileUser author;
 
     @Column(name = "title")
