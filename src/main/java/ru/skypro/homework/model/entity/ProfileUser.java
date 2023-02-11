@@ -1,7 +1,7 @@
 package ru.skypro.homework.model.entity;
 
 import lombok.Data;
-import ru.skypro.homework.model.dto.RoleEnum;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -32,6 +32,7 @@ public class ProfileUser {
     @Column(name = "phone")
     private String phone;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "author",fetch = FetchType.LAZY)
     private Set<Ads> ads;
 
@@ -39,11 +40,8 @@ public class ProfileUser {
     private String regDate;
     @Column(name = "city")
     private String city;
-    @Column(name = "pass")
-    private String password;
-    @Column(name = "role")
-    private RoleEnum role;
 
+    @ToString.Exclude
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private Avatar avatar;
 

@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.exception.AdsNotFoundException;
 import ru.skypro.homework.exception.CommentNotFoundException;
@@ -19,6 +20,7 @@ import ru.skypro.homework.model.mapper.CommentMapper;
 import ru.skypro.homework.model.repository.AdsRepository;
 import ru.skypro.homework.model.repository.CommentRepository;
 import ru.skypro.homework.model.repository.UserRepository;
+import ru.skypro.homework.service.AdsService;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -28,7 +30,8 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Slf4j
 @Service
-public class AdsServiceImpl implements ru.skypro.homework.service.AdsService {
+@Transactional
+public class AdsServiceImpl implements AdsService {
 
     private final CommentRepository commentRepository;
     private final AdsRepository adsRepository;
@@ -135,7 +138,8 @@ public class AdsServiceImpl implements ru.skypro.homework.service.AdsService {
         Ads ads = adsRepository.findById(id).orElseThrow(AdsNotFoundException::new);
         accessService.checkAdsAccess(id, authentication);
 
-        ads = AdsMapper.INSTANCE.createAdsToAds(updatedAds);
+     AdsMapper.INSTANCE.partialUpdate(updatedAds,ads);
+
 
         return AdsMapper
                 .INSTANCE

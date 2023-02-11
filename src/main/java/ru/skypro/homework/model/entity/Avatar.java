@@ -1,6 +1,7 @@
 package ru.skypro.homework.model.entity;
 
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -23,6 +24,7 @@ public class Avatar {
     @Type(type = "org.hibernate.type.BinaryType")
     private byte[] data;
 
-    @OneToOne(mappedBy = "avatar")
+    @ToString.Exclude
+    @OneToOne(mappedBy = "avatar",fetch = FetchType.LAZY)
     private ProfileUser profileUser;
 }

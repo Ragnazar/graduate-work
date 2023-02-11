@@ -13,9 +13,13 @@ import java.util.Collection;
 public interface AdsMapper {
     AdsMapper INSTANCE = Mappers.getMapper(AdsMapper.class);
 
-    @Mapping(source = "id", target = "pk")
+    @Mapping(target = "pk", source = "id")
     @Mapping(target = "author", source = "author.id")
     AdsDto adsToAdsDto(Ads Ads);
+
+    @Mapping(target = "id", source = "pk")
+    @Mapping(target = "author.id", source = "author")
+    Ads adsDtoToAds(AdsDto adsDto);
 
     @Mapping(target = "pk", source = "id")
     @Mapping(target = "phone", source = "author.phone")
@@ -27,6 +31,10 @@ public interface AdsMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
             nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     Ads createAdsToAds(CreateAdsDto createAdsDto);
+
+    @BeanMapping (nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+            nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
+      void partialUpdate(CreateAdsDto createAdsDto, @MappingTarget Ads ads);
 
     Collection<AdsDto> adsCollectionToAdsDto(Collection<Ads> adsCollection);
 
