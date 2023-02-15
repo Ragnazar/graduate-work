@@ -41,9 +41,8 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/login", "/register").permitAll()
-                .antMatchers(HttpMethod.GET, "/ads").permitAll()
-                .antMatchers(HttpMethod.POST, "/ads").authenticated()
-                .antMatchers("/ads/**", "/users/**").authenticated()
+                .antMatchers(HttpMethod.GET, "/ads","/ads/*/getImage").permitAll()
+                .antMatchers("/ads/**", "/users/**","/images/**").authenticated()
                 .mvcMatchers(AUTH_WHITELIST).permitAll()
                 .and()
                 .httpBasic();
@@ -51,7 +50,6 @@ public class WebSecurityConfig {
         return http.build();
 
     }
-
 
 }
 

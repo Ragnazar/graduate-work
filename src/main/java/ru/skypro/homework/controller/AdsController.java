@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -16,10 +17,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.model.dto.*;
 import ru.skypro.homework.service.AdsService;
+import ru.skypro.homework.service.ImageService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-
+import java.io.IOException;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -31,6 +33,7 @@ import javax.validation.constraints.NotBlank;
 public class AdsController {
 
     private final AdsService adsService;
+    private final ImageService imageService;
 
     /**
      * GET /ads
@@ -80,8 +83,8 @@ public class AdsController {
     public ResponseEntity<AdsDto> addAds(@NotNull Authentication authentication,
                                          @RequestPart("properties") @Valid @javax.validation.constraints.NotNull @NotBlank CreateAdsDto properties,
                                          @RequestPart("image") MultipartFile image
-    ) {
-        return ResponseEntity.ok(adsService.save(properties, authentication.getName(), image));
+    ) throws IOException {
+        return ResponseEntity.ok(adsService.save(properties,authentication, image));
     }
 
     /**
@@ -167,7 +170,6 @@ public class AdsController {
     public ResponseEntity<CommentDto> addComments(@PathVariable("ad_pk") Integer adPk,
                                                   @NotNull @Valid @RequestBody CommentDto comment,
                                                   Authentication authentication) {
-        comment.setPk(adPk);
         return ResponseEntity.ok(adsService.addComment(adPk, comment, authentication));
     }
 
@@ -339,4 +341,10 @@ public class AdsController {
                                             Authentication authentication) {
         return ResponseEntity.ok(adsService.updateAds(id, createAds, authentication));
     }
+
+    @GetMapping(value = "/{id}/getImage", produces = {MediaType.IMAGE_PNG_VALUE})
+    public ResponseEntity<byte[]> getImage(@PathVariable int id) throws IOException {
+        return ResponseEntity.ok(imageService.getImage(id));
+    }
+
 }

@@ -14,6 +14,8 @@ import ru.skypro.homework.model.mapper.UserMapper;
 import ru.skypro.homework.model.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
 
+import java.time.LocalDate;
+
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -66,6 +68,7 @@ public class AuthServiceImpl implements AuthService {
                         .build()
         );
         ProfileUser userProfile = UserMapper.INSTANCE.registerReqDtoToUser(registerReqDto);
+        userProfile.setRegDate(LocalDate.now().toString());
         userRepository.save(userProfile);
         return true;
     }

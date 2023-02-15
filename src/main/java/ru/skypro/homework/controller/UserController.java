@@ -8,7 +8,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +19,8 @@ import ru.skypro.homework.model.dto.UserDto;
 import ru.skypro.homework.model.entity.ProfileUser;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.UsersService;
+
+import java.io.IOException;
 
 @Slf4j
 @CrossOrigin(origins = "http://localhost:3000")
@@ -52,7 +56,7 @@ public class UserController {
             }
     )
     @GetMapping("/me")
-    public ResponseEntity<UserDto> getUser(Authentication authentication) {
+    public ResponseEntity<UserDto> getUser(Authentication authentication) throws IOException {
         return ResponseEntity.ok(userService.getUser(authentication.getName()));
     }
 
@@ -113,9 +117,10 @@ public class UserController {
             }
     )
     @PatchMapping("/me")
-    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto user, Authentication authentication) {
+    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto user, Authentication authentication) throws IOException {
         return ResponseEntity.ok(userService.update(user, authentication.getName()));
     }
+    //картинка присваевается пользователю но по запросу GET: user/me картинка не отрисовывается.уточнить какой точно формат нужен на фронте
 
     /**
      * PATCH /users/me/image : updateUserImage
@@ -134,8 +139,15 @@ public class UserController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @PatchMapping("/me/image")
-    public ResponseEntity<Void> updateUserImage(MultipartFile image, Authentication authentication) {
-        return null;//TODO сделать метод добавления аватарки
+    @PatchMapping(value ="/me/image",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> updateUserImage(@RequestParam MultipartFile image, Authentication authentication) throws IOException {
+       userService.updateAvatar (image, authentication.getName());
+return ResponseEntity.status(200).build();
+    }
+
+    @GetMapping(value = "/me/getImage", produces = {MediaType.IMAGE_PNG_VALUE})
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    public ResponseEntity<byte[]> getImage(Authentication authentication) throws IOException {
+        return ResponseEntity.ok( userService.getImage(authentication.getName()));
     }
 }

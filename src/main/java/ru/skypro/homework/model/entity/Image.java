@@ -2,7 +2,6 @@ package ru.skypro.homework.model.entity;
 
 import lombok.Data;
 import lombok.ToString;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
@@ -14,17 +13,9 @@ public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(name = "generatedIdFromMultipartFile")
-    private String generatedIdFromMultipartFile;
-    @Column(name = "file_size")
-    private long fileSize;
-    @Column(name = "media_type")
-    private String mediaType;
+    @Column(name = "path")
+    private String path;
 
-    @Lob
-    @Column(name = "data")
-    @Type(type = "org.hibernate.type.BinaryType")
-    private byte[] data;
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     private Ads ads;

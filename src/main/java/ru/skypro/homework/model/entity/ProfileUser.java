@@ -41,8 +41,6 @@ public class ProfileUser {
     @Column(name = "city")
     private String city;
 
-    @ToString.Exclude
-    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    private Avatar avatar;
+    private String avatar;
 
 }
