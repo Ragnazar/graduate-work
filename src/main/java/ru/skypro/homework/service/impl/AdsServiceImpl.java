@@ -22,6 +22,7 @@ import ru.skypro.homework.model.repository.CommentRepository;
 import ru.skypro.homework.model.repository.UserRepository;
 import ru.skypro.homework.service.AdsService;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -37,12 +38,14 @@ public class AdsServiceImpl implements AdsService {
     private final AdsRepository adsRepository;
     private final UserRepository userRepository;
     private final AccessService accessService;
+    private final ImageServiceImpl imageService;
 
-    public AdsServiceImpl(CommentRepository commentRepository, AdsRepository adsRepository, UserRepository userProfileRepository, AccessService accessService) {
+    public AdsServiceImpl(CommentRepository commentRepository, AdsRepository adsRepository, UserRepository userProfileRepository, AccessService accessService, ImageServiceImpl imageService) {
         this.commentRepository = commentRepository;
         this.adsRepository = adsRepository;
         this.userRepository = userProfileRepository;
         this.accessService = accessService;
+        this.imageService = imageService;
     }
 
     @Override
@@ -59,14 +62,14 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public AdsDto save(CreateAdsDto ads, String email, MultipartFile image) {
+    public AdsDto save(CreateAdsDto ads, Authentication authentication, MultipartFile image) throws IOException {
 
         Ads newAds = AdsMapper.INSTANCE.createAdsToAds(ads);
-        newAds.setAuthor(userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new));
+        newAds.setAuthor(userRepository.findByEmail(authentication.getName()).orElseThrow(UserNotFoundException::new));
         log.info("Save ads: " + newAds);
         adsRepository.save(newAds);
 
-        saveImage(image, newAds);      //TODO сделать метод сохранения картинки в таблицу
+        imageService.updateAdsImage(newAds.getId(),image,authentication);
         log.info("Photo have been saved");
 
         return AdsMapper
@@ -89,7 +92,7 @@ public class AdsServiceImpl implements AdsService {
         Integer userId = userRepository.getUserProfileId(authentication.getName());
 
         Comment comment = CommentMapper.INSTANCE.commentDtoToComment(adsComment);
-
+        comment.setAdsId(adsId);
         comment.setAuthor(userId);
         comment.setCreatedAt(LocalDateTime.now().toString());
 
@@ -152,11 +155,4 @@ public class AdsServiceImpl implements AdsService {
         Collection<Ads> ads = adsRepository.findByAuthorId(authorId);
         return AdsMapper.INSTANCE.adsCollectionToAdsDto(ads);
     }
-
-
-    private void saveImage(MultipartFile image, Ads ads) {
-
-    }
-
-
 }

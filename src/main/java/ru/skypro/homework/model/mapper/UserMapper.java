@@ -6,22 +6,32 @@ import ru.skypro.homework.model.dto.RegisterReqDto;
 import ru.skypro.homework.model.dto.UserDto;
 import ru.skypro.homework.model.entity.ProfileUser;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE,componentModel = "spring")
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
-    @Mapping(target = "avatar.id", source = "avatar")
-    @Mapping(target = "id", source = "id")
-    ProfileUser userDtoToUser(UserDto userDto);
-    @Mapping(source = "avatar.id", target = "avatar")
-    @Mapping(target = "id", source = "id")
-    UserDto userToUserDto(ProfileUser profileUser);
 
-    @BeanMapping (nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "avatar", expression = "java(getImage(profileUser))")
+    UserDto userToUserDto(ProfileUser profileUser) throws IOException;
+
+    default byte[] getImage(ProfileUser profileUser) throws IOException {
+
+        if (profileUser.getAvatar()==null) {
+            return null;
+        }
+        return Files.readAllBytes(Paths.get(profileUser.getAvatar()));
+    }
+
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
             nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
-    @Mapping(target = "avatar.id", source = "avatar")
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "avatar",ignore = true)
     void partialUpdate(UserDto userDto, @MappingTarget ProfileUser profileUser);
-
 
 
     @Mapping(source = "username", target = "email")
