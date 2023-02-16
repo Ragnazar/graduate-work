@@ -11,5 +11,5 @@ public class UserDto {
     public String phone;
     private String regDate;
     private String city;
-    private byte[] avatar;
+    private String avatar;
 }

@@ -25,7 +25,7 @@ CREATE TABLE profile_user
     phone           VARCHAR(50),
     reg_date        VARCHAR(50),
     city            VARCHAR(50),
-    avatar          text
+    image          text
 );
 
 ALTER TABLE profile_user

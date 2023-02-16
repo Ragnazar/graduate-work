@@ -347,4 +347,12 @@ public class AdsController {
         return ResponseEntity.ok(imageService.getImage(id));
     }
 
+    @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    public ResponseEntity<byte[]> updateAdsImage(@PathVariable Integer id,@RequestParam MultipartFile image,
+                                                 Authentication authentication) throws IOException {
+
+        return ResponseEntity.ok(imageService.updateAdsImage(id, image,authentication));
+        //не приходит запрос от сервера(или приходит не этот)
+    }
 }
