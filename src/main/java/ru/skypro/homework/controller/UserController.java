@@ -56,6 +56,7 @@ public class UserController {
             }
     )
     @GetMapping("/me")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<UserDto> getUser(Authentication authentication) throws IOException {
         return ResponseEntity.ok(userService.getUser(authentication.getName()));
     }
@@ -83,6 +84,7 @@ public class UserController {
             }
     )
     @PostMapping("/set_password")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<NewPasswordDto> setPassword(@RequestBody NewPasswordDto newPassword, Authentication authentication) {
 
         if (authService.changePassword(newPassword, authentication.getName())) {
@@ -117,6 +119,7 @@ public class UserController {
             }
     )
     @PatchMapping("/me")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto user, Authentication authentication) throws IOException {
         return ResponseEntity.ok(userService.update(user, authentication.getName()));
     }
@@ -139,14 +142,16 @@ public class UserController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @PatchMapping(value ="/me/image",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<Void> updateUserImage(@RequestParam MultipartFile image, Authentication authentication) throws IOException {
-       userService.updateAvatar (image, authentication.getName());
-return ResponseEntity.status(200).build();
+        userService.updateAvatar(image, authentication.getName());
+        return ResponseEntity.status(200).build();
     }
 
     @GetMapping(value = "/{name}/getImage", produces = {MediaType.IMAGE_PNG_VALUE})
-      public ResponseEntity<byte[]> getImage(@PathVariable("name") String name) throws IOException {
-        return ResponseEntity.ok( userService.getImage(name));
+    public ResponseEntity<byte[]> getImage(@PathVariable("name") int name) throws IOException {
+        return ResponseEntity.ok(userService.getImage(name));
     }
+//   http://127.0.0.1:8080/users/2/getImage
 }

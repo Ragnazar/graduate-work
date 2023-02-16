@@ -56,7 +56,7 @@ public class ImageServiceImpl implements ImageService {
             throw new ImageNotFoundException();
         }
         //по кеакой то причине фронт не может работать с массивом картинок
-        return Files.readAllBytes(Paths.get(ads.getImages().get(ads.getImages().size() - 1).getPath()));
+        return Files.readAllBytes(Paths.get(ads.getImages().get(0).getPath()));
     }
 
     public String saveImage(String name, MultipartFile file) {

@@ -41,6 +41,6 @@ public class ProfileUser {
     @Column(name = "city")
     private String city;
 
-    private String avatar;
+    private String image;
 
 }

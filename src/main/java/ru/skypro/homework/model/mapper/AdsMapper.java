@@ -10,7 +10,6 @@ import ru.skypro.homework.model.entity.Image;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface AdsMapper {
@@ -41,11 +40,11 @@ public interface AdsMapper {
 
     Collection<AdsDto> adsCollectionToAdsDto(Collection<Ads> adsCollection);
 
-    default List<String> mappedImages(Ads ads) {
+    default String mappedImages(Ads ads) {
         List<Image> image= ads.getImages();
-        if (image == null || image.isEmpty()) {
+        if (image == null) {
             return null;
         }
-        return image.stream().map(i -> "/ads/"+ads.getId()+"/getImage").collect(Collectors.toList());
+        return image.stream().reduce((first, second) -> second).map(i -> "/ads/"+ads.getId()+"/getImage").orElse(null);
     }
 }

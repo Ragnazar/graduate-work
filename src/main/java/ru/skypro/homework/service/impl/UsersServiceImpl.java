@@ -53,19 +53,19 @@ public class UsersServiceImpl implements UsersService {
     public void updateAvatar(MultipartFile image, String name) throws IOException {
         ProfileUser user = userRepository.findByEmail(name).orElseThrow(UserNotFoundException::new);
 
-        if (user.getAvatar() != null) {
-            Files.delete(Paths.get(user.getAvatar()));
+        if (user.getImage() != null) {
+            Files.delete(Paths.get(user.getImage()));
         }
-        user.setAvatar(imageService.saveImage(UUID.randomUUID() + name, image));
+        user.setImage(imageService.saveImage(UUID.randomUUID() + name, image));
         userRepository.save(user);
     }
 
     @Override
-    public byte[] getImage( String name) throws IOException {
-        ProfileUser user = userRepository.findByEmail(name).orElseThrow(UserNotFoundException::new);
-        if (user.getAvatar() == null) {
+    public byte[] getImage( int id) throws IOException {
+        ProfileUser user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        if (user.getImage() == null) {
             throw new ImageNotFoundException();
         }
-        return Files.readAllBytes(Paths.get(user.getAvatar()));
+        return Files.readAllBytes(Paths.get(user.getImage()));
     }
 }
