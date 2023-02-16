@@ -18,12 +18,8 @@ public interface UserMapper {
     @Mapping(target = "avatar", expression = "java(getImage(profileUser))")
     UserDto userToUserDto(ProfileUser profileUser) throws IOException;
 
-    default byte[] getImage(ProfileUser profileUser) throws IOException {
-
-        if (profileUser.getAvatar()==null) {
-            return null;
-        }
-        return Files.readAllBytes(Paths.get(profileUser.getAvatar()));
+    default String getImage(ProfileUser profileUser) throws IOException {
+        return "/users/"+profileUser.getEmail()+"/getImage";
     }
 
 

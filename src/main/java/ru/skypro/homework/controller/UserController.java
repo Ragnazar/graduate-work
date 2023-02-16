@@ -145,9 +145,8 @@ public class UserController {
 return ResponseEntity.status(200).build();
     }
 
-    @GetMapping(value = "/me/getImage", produces = {MediaType.IMAGE_PNG_VALUE})
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public ResponseEntity<byte[]> getImage(Authentication authentication) throws IOException {
-        return ResponseEntity.ok( userService.getImage(authentication.getName()));
+    @GetMapping(value = "/{name}/getImage", produces = {MediaType.IMAGE_PNG_VALUE})
+      public ResponseEntity<byte[]> getImage(@PathVariable("name") String name) throws IOException {
+        return ResponseEntity.ok( userService.getImage(name));
     }
 }

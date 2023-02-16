@@ -61,7 +61,7 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public byte[] getImage(String name) throws IOException {
+    public byte[] getImage( String name) throws IOException {
         ProfileUser user = userRepository.findByEmail(name).orElseThrow(UserNotFoundException::new);
         if (user.getAvatar() == null) {
             throw new ImageNotFoundException();

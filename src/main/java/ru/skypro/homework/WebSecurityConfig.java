@@ -24,13 +24,13 @@ public class WebSecurityConfig {
             "/swagger-ui.html",
             "/v3/api-docs",
             "/webjars/**",
-            "/login", "/register"
+            "/login", "/register", "/user/*/getImage"
     };
 
     @Bean
     public JdbcUserDetailsManager userDetailsService() {
         PGSimpleDataSource dbSource = new PGSimpleDataSource();
-      dbSource.setServerNames(null);
+        dbSource.setServerNames(null);
         dbSource.setDatabaseName(databaseUrl.substring(databaseUrl.lastIndexOf("/") + 1));
         dbSource.setUser(databaseUser);
         dbSource.setPassword(databaseUserPassword);
@@ -40,9 +40,9 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/login", "/register").permitAll()
-                .antMatchers(HttpMethod.GET, "/ads","/ads/*/getImage").permitAll()
-                .antMatchers("/ads/**", "/users/**","/images/**").authenticated()
+                //   .antMatchers(HttpMethod.POST, "/login", "/register").permitAll()
+                .antMatchers(HttpMethod.GET, "/ads", "/ads/*/getImage", "/image/**").permitAll()
+                .antMatchers("/ads/**", "/users/**").authenticated()
                 .mvcMatchers(AUTH_WHITELIST).permitAll()
                 .and()
                 .httpBasic();
