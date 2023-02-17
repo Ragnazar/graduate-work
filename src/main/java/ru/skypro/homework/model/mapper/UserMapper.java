@@ -13,7 +13,7 @@ public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "avatar", expression = "java(getImage(profileUser))")
+    @Mapping(target = "image", expression = "java(getImage(profileUser))")
     UserDto userToUserDto(ProfileUser profileUser) throws IOException;
 
     default String getImage(ProfileUser profileUser) throws IOException {
