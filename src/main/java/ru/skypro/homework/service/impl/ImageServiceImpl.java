@@ -6,7 +6,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.exception.AdsNotFoundException;
-import ru.skypro.homework.exception.ImageNotFoundException;
 import ru.skypro.homework.model.entity.*;
 import ru.skypro.homework.model.repository.AdsRepository;
 import ru.skypro.homework.model.repository.ImageRepository;
@@ -16,6 +15,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -52,11 +52,12 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public byte[] getImage(int id) throws IOException {
         Ads ads = adsRepository.findById(id).orElseThrow(AdsNotFoundException::new);
-        if (ads.getImages().isEmpty()) {
-            throw new ImageNotFoundException();
-        }
+
         //по кеакой то причине фронт не может работать с массивом картинок
-        return Files.readAllBytes(Paths.get(ads.getImages().get(0).getPath()));
+        return Files.readAllBytes(Paths.get(Objects.requireNonNull(ads.getImages().stream().
+                reduce((first, second) -> second).map(Image::getPath).orElse(null))));
+
+
     }
 
     public String saveImage(String name, MultipartFile file) {

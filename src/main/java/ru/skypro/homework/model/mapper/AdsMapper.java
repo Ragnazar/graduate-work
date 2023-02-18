@@ -42,9 +42,9 @@ public interface AdsMapper {
 
     default String mappedImages(Ads ads) {
         List<Image> image= ads.getImages();
-        if (image == null) {
+        if (image == null||image.isEmpty()) {
             return null;
         }
-        return image.stream().reduce((first, second) -> second).map(i -> "/ads/"+ads.getId()+"/getImage").orElse(null);
+        return  "/ads/"+ads.getId()+"/getImage";
     }
 }
