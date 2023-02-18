@@ -17,6 +17,9 @@ public interface UserMapper {
     UserDto userToUserDto(ProfileUser profileUser) throws IOException;
 
     default String getImage(ProfileUser profileUser) throws IOException {
+        if (profileUser.getImage()==null||profileUser.getImage().isEmpty()){
+            return null;
+        }
         return "/users/"+profileUser.getId()+"/getImage";
     }
 
